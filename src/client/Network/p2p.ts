@@ -1,8 +1,11 @@
 import Peer from 'peerjs';
 import LobbyModal from '../UI/LobbyModal';
+import {getQuerystringParams} from '../urlHelpers';
 
-const BROKER_PROTOCOL = 'https://';
-const BROKER_HOSTNAME = 'peer-broker.herokuapp.com';
+const {brokerURL} = getQuerystringParams();
+
+const BROKER_PROTOCOL = brokerURL ? brokerURL.split('//')[0] + '//' : 'https://';
+const BROKER_HOSTNAME = brokerURL ? brokerURL.split('//')[1] : 'peer-broker.herokuapp.com';
 
 const ANYONE = '*';
 

@@ -9,7 +9,7 @@ Base tech:
 - Hollowed out ECS game engine ripped from Celestial Combat
     - hacked to be side-scrolling vs top-down 
  
-### Playing
+## Playing
 
 Go to http://jsyang.ca/artillery-p2p for the latest public build.
 
@@ -23,7 +23,24 @@ e.g. `bob,joe,*`
 1. Click "Connect to lobby"
 1. Select them on this list and click "Connect to selected player" to enter the game
 
-## POC conclusions
+## For developers
+
+1. `yarn`
+2. `yarn watch`
+3. http://localhost:3000
+
+You can either use the hardcoded broker server at https://peer-broker.herokuapp.com
+or run your own and point to it with `http://localhost:3000?brokerURL=http://BROKER-SERVER-URL`
+
+## Outstanding issues
+
+- game state gets out of sync easily during play when latency / packet loss gets bad
+  - ghost tanks may remain when you die
+- need timestamping for outgoing and incoming messages for ordering
+- lobby connection needs to account for warm up of heroku server (it will fail without it)
+- need to maintain peerjs client connection to the broker (sometimes it will drop the connection while you're in the lobby)
+
+## Learnings
 
 ### Logic
  
