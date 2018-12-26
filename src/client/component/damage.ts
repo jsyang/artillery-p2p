@@ -1,0 +1,39 @@
+import {playSoundLocalized} from '../assets/audio';
+import Entity from '../Entity';
+import {testPointInEntity} from '../Geometry';
+
+const DEFAULTS = {
+    damageHp: 1
+};
+
+// Also creates a lastDamagedByTeam property on the
+// target entity for tracking score
+function registerDamage(entity): boolean {
+    const {team, damageHp} = this;
+
+    if (entity.team !== team) {
+        if (testPointInEntity(this, entity)) {
+            playSoundLocalized(entity.AUDIO_HIT || 'hit', this);
+            entity.hp -= damageHp;
+            entity.lastDamagedByTeam = team;
+            entity.hitTime           = 10;
+            Entity.destroy(this);
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// Damages other entities if it collides with them
+function process(entity) {
+    Entity.getNearestUnits()
+        .some(registerDamage.bind(entity));
+}
+
+export default {
+    componentFlag: 'canDamage',
+    DEFAULTS,
+    process
+}

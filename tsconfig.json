@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "es6",
+    "module": "es6",
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "lib": [
+      "es2017.object",
+      "es6",
+      "es7",
+      "dom"
+    ],
+    "noUnusedLocals": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    "src/client/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
