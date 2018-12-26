@@ -68,8 +68,8 @@ function create({peers, onSuccess}) {
         <td width="60%">
         Chat
             <textarea style="width:100%;${chatFormStyle}" id="chatText" rows="10"></textarea>
-            <form id="chatForm">
-                <input id="chatInput" type="text" id="chatInput" placeholder="Type a message to the lobby..." style="${chatFormStyle}width:80%;float:left"/>
+            <form id="chatForm" autocomplete="off">
+                <input id="chatInput" type="text" id="chatInput" autocomplete="off" placeholder="Type a message to the lobby..." style="${chatFormStyle}width:80%;float:left"/>
                 <input id="chatSend" type="submit" id="chatSend" value="Send" style="${chatFormStyle}width:20%;float:left"/>
             </form>
         </td>
