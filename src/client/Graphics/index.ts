@@ -42,13 +42,8 @@ function onResize(): void {
 const removeAllChildren = () => {
     sceneChildrenOnResizeFuncs = {};
 
-    while (stage.children[0]) {
-        stage.removeChild(stage.children[0]);
-    }
-
-    while (scene.children[0]) {
-        scene.removeChild(scene.children[0]);
-    }
+    stage.removeChildren();
+    scene.removeChildren();
 
     scene.addChild(stage);
 };
@@ -84,8 +79,17 @@ function init(): void {
         document.body.appendChild(renderer.view);
 
         if (getIsMobile()) {
+            renderer.view.removeEventListener('touchstart', goFullScreen);
             renderer.view.addEventListener('touchstart', goFullScreen);
         }
+    }
+}
+
+function destroy() {
+    removeAllChildren();
+
+    if (renderer) {
+        document.body.removeChild(renderer.view);
     }
 }
 
@@ -149,6 +153,7 @@ function cullRenderable() {
 
 export default {
     init,
+    destroy,
     setGlobalAlpha,
     addChild,
     removeChild,

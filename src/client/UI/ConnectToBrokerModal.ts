@@ -69,7 +69,10 @@ function create({userId, whitelist, onSuccess}) {
 }
 
 function destroy() {
-    document.body.removeChild(modal);
+    if (modal && modal.parentElement) {
+        modal.parentElement.removeChild(modal);
+        modal = null;
+    }
 }
 
 export default {

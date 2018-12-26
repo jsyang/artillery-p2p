@@ -1,7 +1,7 @@
 import applyStyle from './applyStyle';
 import p2p from '../Network/p2p';
 
-let modal: HTMLDivElement;
+let modal: HTMLDivElement | null;
 
 const elements: any = {
     select:           null,
@@ -57,7 +57,7 @@ function sendAndRefreshChat(message: string = '') {
         });
 }
 
-function create({peers, onSuccess}) {
+function create(onSuccess) {
     modal = document.createElement('div');
     applyStyle.modal(modal);
 
@@ -93,8 +93,6 @@ function create({peers, onSuccess}) {
 
     elements.refreshIndicator.style.opacity = 0;
 
-    setPeersList(peers);
-
     elements.connectToPeer.onclick = () => p2p.connectToPeer(elements.select.value).then(destroy);
     elements.chatForm.onsubmit     = (e) => {
         e.preventDefault();
@@ -114,7 +112,11 @@ function create({peers, onSuccess}) {
 }
 
 function destroy() {
-    document.body.removeChild(modal);
+    if (modal && modal.parentElement) {
+        modal.parentElement.removeChild(modal);
+        modal = null;
+    }
+
     if (_onSuccess) {
         _onSuccess();
     }

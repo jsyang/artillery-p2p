@@ -16,6 +16,12 @@ export enum StorageKeysP2P {
     UserId    = 'p2p-userId'
 }
 
+let onDisconnectFromPeer: Function = d => console.log(d);
+
+function setOnDisconnectFromPeer(onDisconnect) {
+    onDisconnectFromPeer = onDisconnect;
+}
+
 let onDataFromPeer: Function = d => console.log(d);
 
 function setOnDataFromPeer(onData: Function) {
@@ -27,6 +33,8 @@ function onData(data) {
     onDataFromPeer(data);
 }
 
+let lastConnectedPeer;
+
 // Peer attempts to connect to you
 function onOpen() {
     const {peer} = connections.peer;
@@ -36,12 +44,12 @@ function onOpen() {
         // Kill the connection to the broker as soon as our peer connection is opened
         connections.broker.disconnect();
         LobbyModal.destroy();
-        console.log(`Peer connection opened to ${peer}!`);
+        lastConnectedPeer = peer;
     }
 }
 
 let peerId             = localStorage.getItem(StorageKeysP2P.UserId) || Date.now().toString(16);
-let peerWhitelist: any = localStorage.getItem(StorageKeysP2P.Whitelist);
+let peerWhitelist: any = localStorage.getItem(StorageKeysP2P.Whitelist) || '*';
 if (peerWhitelist && peerWhitelist.length) {
     peerWhitelist = peerWhitelist.split(',');
 }
@@ -55,8 +63,8 @@ function setPeerId() {
 }
 
 function setPeerWhitelist() {
-    peerWhitelist = (prompt('Set comma-separated whitelist of peers allowed to connect to you:',
-        localStorage.getItem(StorageKeysP2P.Whitelist) || 'bob'
+    peerWhitelist = (prompt('Whitelist of peers allowed to connect to you (comma-separated, use * for anyone)',
+        localStorage.getItem(StorageKeysP2P.Whitelist) || '*'
     ) || '').split(',');
 
     localStorage.setItem(StorageKeysP2P.Whitelist, peerWhitelist.join(','));
@@ -64,11 +72,14 @@ function setPeerWhitelist() {
 
 const bindPeerConnectionEvents = potentialConnection => {
     potentialConnection.on('data', onData);
-    potentialConnection.on('close', () => connections.peer = null);
+    potentialConnection.on('close', () => {
+        connections.peer = null;
+        onDisconnectFromPeer();
+    });
 };
 
 const connectToPeer = toPeerId => {
-    if(toPeerId === peerId) {
+    if (toPeerId === peerId) {
         return Promise.reject('Cannot connect to yourself!');
     }
 
@@ -76,7 +87,8 @@ const connectToPeer = toPeerId => {
         if (toPeerId) {
             const potentialPeerConnection = connections.broker.connect(toPeerId);
             potentialPeerConnection.on('open', () => {
-                connections.peer = potentialPeerConnection;
+                lastConnectedPeer = toPeerId;
+                connections.peer  = potentialPeerConnection;
                 // Kill the connection to the broker as soon as our peer connection is opened
                 connections.broker.disconnect();
                 resolve(connections);
@@ -156,7 +168,7 @@ function connectToBroker() {
 function getPeerIds() {
     return {
         self:  peerId,
-        other: connections.peer && connections.peer.peer
+        other: connections.peer && connections.peer.peer || lastConnectedPeer
     };
 }
 
@@ -167,6 +179,7 @@ export default {
     connectToPeer,
     sendToPeer,
     setOnDataFromPeer,
+    setOnDisconnectFromPeer,
     setPeerId,
     setPeerWhitelist,
     postLobbyChat

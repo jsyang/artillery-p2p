@@ -12,7 +12,7 @@ import p2p from '../Network/p2p';
 import {deserializeFromNetwork, GameInfo, serializeForNetwork} from '../GameState';
 import Score from '../Score';
 
-let then; // Time stamp of last animation frame
+let then = 0; // Time stamp of last animation frame
 
 const FPS          = 60;
 const FPS_INTERVAL = 1000 / FPS;
@@ -23,6 +23,7 @@ const P2P_UPDATE_INTERVAL = 30; // ms
 let playerTankFields;
 
 let isPaused = false;
+let raf;
 
 function update(now: number) {
     Entity.updateAll();
@@ -64,12 +65,11 @@ function step() {
         then = now - (elapsed % FPS_INTERVAL);
     }
 
-    requestAnimationFrame(step);
+    raf = requestAnimationFrame(step);
 }
 
-function start() {
-    then = Date.now();
-    step();
+function stop() {
+    cancelAnimationFrame(raf);
 }
 
 function controlEntity(entity) {
@@ -84,6 +84,7 @@ function init() {
     Graphics.init();
     Entity.clearAll();
     p2p.setOnDataFromPeer(deserializeFromNetwork);
+    p2p.setOnDisconnectFromPeer(deserializeFromNetwork);
 
     HUD.init();
     OutOfBoundsDisplay.init();
@@ -117,6 +118,7 @@ function onResize() {
 
 export default {
     init,
-    start,
+    step,
+    stop,
     getPlayerTeam: () => playerTankFields.team
 };
