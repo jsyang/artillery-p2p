@@ -45,8 +45,7 @@ or run your own and point to it with `http://localhost:3000?brokerURL=http://BRO
 - game state gets out of sync easily during play when latency / packet loss gets bad
   - ghost tanks may remain when you die
 - need timestamping for outgoing and incoming messages for ordering
-- lobby connection needs to account for warm up of heroku server (it will fail without it)
-- need to maintain peerjs client connection to the broker (sometimes it will drop the connection while you're in the lobby)
+- [stun / turn server may be required](https://stackoverflow.com/questions/20068944)
 
 ## Learnings
 
