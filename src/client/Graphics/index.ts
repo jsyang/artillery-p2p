@@ -70,8 +70,6 @@ function goFullScreen() {
 }
 
 function init(): void {
-    removeAllChildren();
-
     if (typeof renderer === 'undefined') {
         onResize();
         scene.addChild(stage);
@@ -88,8 +86,9 @@ function init(): void {
 function destroy() {
     removeAllChildren();
 
-    if (renderer) {
-        document.body.removeChild(renderer.view);
+    if (renderer && renderer.view && renderer.view.parentElement) {
+        renderer.view.parentElement.removeChild(renderer.view);
+        renderer = undefined;
     }
 }
 

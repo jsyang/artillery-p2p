@@ -23,6 +23,14 @@ e.g. `bob,joe,*`
 1. Click "Connect to lobby"
 1. Select them on this list and click "Connect to selected player" to enter the game
 
+### Controls
+
+Keyboard: arrow keys for moving and rotating the cannon, F key to fire a shot.
+
+This game has on screen controls for mobile browsers: not pretty, but functional:
+
+![mobile view](mobile.jpg)
+
 ## For developers
 
 1. `yarn`

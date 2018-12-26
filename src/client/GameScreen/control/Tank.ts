@@ -14,7 +14,7 @@ export default function controlFighter(controlledEntity, events: IInputEvent, pr
             newX = controlledEntity.x + dx;
         }
 
-        if (newX >= GROUND_MIN_X && newX <= GROUND_MAX_X) {
+        if (newX >= GROUND_MIN_X && newX < GROUND_MAX_X) {
             controlledEntity.x = newX;
         }
     }

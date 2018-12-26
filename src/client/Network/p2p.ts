@@ -36,6 +36,21 @@ function onData(data) {
     onDataFromPeer(data);
 }
 
+function disconnectFromBrokerIntentionally() {
+    const oldOnDisconnectFromBrokerFunc = onDisconnectFromBroker;
+
+    setOnDisconnectFromBroker(new Function());
+
+    // Kill the connection to the broker as soon as our peer connection is opened
+    // this is on purpose, so the onDisconnect should not be fired here
+    connections.broker.disconnect();
+    connections.broker.off('open');
+    connections.broker.off('connection');
+    connections.broker.off('disconnected');
+
+    setOnDisconnectFromBroker(oldOnDisconnectFromBrokerFunc);
+}
+
 let lastConnectedPeer;
 
 // Peer attempts to connect to you
@@ -44,8 +59,8 @@ function onOpen() {
 
     // Ignore all non-whitelisted connections
     if (peerWhitelist.includes(ANYONE) || peerWhitelist.includes(peer)) {
-        // Kill the connection to the broker as soon as our peer connection is opened
-        connections.broker.disconnect();
+        disconnectFromBrokerIntentionally();
+
         LobbyModal.destroy();
         lastConnectedPeer = peer;
     }
@@ -92,8 +107,7 @@ const connectToPeer = toPeerId => {
             potentialPeerConnection.on('open', () => {
                 lastConnectedPeer = toPeerId;
                 connections.peer  = potentialPeerConnection;
-                // Kill the connection to the broker as soon as our peer connection is opened
-                connections.broker.disconnect();
+                disconnectFromBrokerIntentionally();
                 resolve(connections);
             });
             bindPeerConnectionEvents(potentialPeerConnection);
@@ -130,6 +144,22 @@ function postLobbyChat(message) {
         .then(res => res.json());
 }
 
+function sendWhitelistToBroker() {
+    return fetch(`${BROKER_PROTOCOL}${BROKER_HOSTNAME}/whitelist`,
+        {
+            method:  'post',
+            body:    JSON.stringify({id: peerId, peerWhitelist}),
+            headers: {'Content-Type': 'application/json'}
+        }
+    );
+}
+
+let onDisconnectFromBroker = new Function();
+
+function setOnDisconnectFromBroker(onDisconnect) {
+    onDisconnectFromBroker = onDisconnect;
+}
+
 // Establish connection to peer broker
 function connectToBroker() {
     connections.broker = new Peer(peerId, {
@@ -141,18 +171,12 @@ function connectToBroker() {
 
 
     return new Promise((resolve, reject) => {
-        const timeoutFetch = setTimeout(reject, 5000);
+        const timeoutFetch = setTimeout(reject, 30000);
 
-        connections.broker.on('open', id => {
-            console.log(`Connection to broker successful! Your id is ${id}`);
+        connections.broker.on('open', () => {
+            console.log('Connection to broker successful!');
 
-            fetch(`${BROKER_PROTOCOL}${BROKER_HOSTNAME}/whitelist`,
-                {
-                    method:  'post',
-                    body:    JSON.stringify({id: peerId, peerWhitelist}),
-                    headers: {'Content-Type': 'application/json'}
-                }
-            )
+            sendWhitelistToBroker()
                 .then(() => clearTimeout(timeoutFetch))
                 .then(getActivePeers)
                 .then(resolve)
@@ -163,6 +187,13 @@ function connectToBroker() {
             connections.peer = connectionPeer;
             connectionPeer.on('open', onOpen);
             bindPeerConnectionEvents(connectionPeer);
+        });
+
+        connections.broker.on('disconnected', () => {
+            console.log('Connection to broker lost, attempting to reconnect!');
+            connections.broker.destroy();
+
+            onDisconnectFromBroker();
         });
 
     });
@@ -183,6 +214,7 @@ export default {
     sendToPeer,
     setOnDataFromPeer,
     setOnDisconnectFromPeer,
+    setOnDisconnectFromBroker,
     setPeerId,
     setPeerWhitelist,
     postLobbyChat

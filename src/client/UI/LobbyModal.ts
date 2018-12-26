@@ -17,7 +17,7 @@ let _onSuccess;
 const selectStyle   = 'font-size:0.75em; width:100%; height:13em';
 const chatFormStyle = 'font-size:0.75em;';
 let pollingIntervalLobby;
-const POLLING_TIME  = 2000;
+const POLLING_TIME  = 3000;
 
 function setPeersList(peers) {
     const {self} = p2p.getPeerIds();

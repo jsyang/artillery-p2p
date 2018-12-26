@@ -10,10 +10,7 @@ server.use(express.json());
 
 const ANYONE = '*';
 
-server.on('connection', id => {
-    activeConnections[id] = [];
-    console.log(`+${id} = ${Object.keys(activeConnections).length}`);
-});
+server.on('connection', id => activeConnections[id] = []);
 
 // Once your whitelist is registered, it is used to form the GET response:
 // registered id that do not include the GET requester's id will not be part
@@ -69,9 +66,6 @@ server.post('/lobby', (req, res) => {
     }
 });
 
-server.on('disconnect', id => {
-    delete activeConnections[id];
-    console.log(`-${id} = ${Object.keys(activeConnections).length}`);
-});
+server.on('disconnect', id => delete activeConnections[id]);
 
 console.log(`P2P broker listening on port ${port}!`);

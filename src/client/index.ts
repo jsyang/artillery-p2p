@@ -8,15 +8,12 @@ import LobbyModal from './UI/LobbyModal';
 function startGame() {
     GameScreen.init();
     GameScreen.step();
-
     p2p.setOnDisconnectFromPeer(() => {
         const {other} = p2p.getPeerIds();
         GameScreen.stop();
         alert(`${other} has left the game. You will now return to the lobby.`);
 
-        p2p.connectToBroker()
-            .then(showLobby)
-            .catch(setupP2P);
+        reconnectToBroker();
     });
 }
 
@@ -24,6 +21,12 @@ function showLobby() {
     Graphics.destroy();
     ConnectToBrokerModal.destroy();
     LobbyModal.create(startGame);
+}
+
+function reconnectToBroker() {
+    p2p.connectToBroker()
+        .then(showLobby)
+        .catch(setupP2P);
 }
 
 function setupP2P() {
@@ -38,6 +41,8 @@ function setupP2P() {
 
 function onDOMContentLoaded() {
     removeEventListener('DOMContentLoaded', onDOMContentLoaded);
+
+    p2p.setOnDisconnectFromBroker(reconnectToBroker);
 
     Assets
         .load()
