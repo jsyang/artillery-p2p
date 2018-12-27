@@ -15,7 +15,10 @@ function onClickConnectToBroker() {
     elements.connectToBrokerButton.style.display = 'none';
     elements.connectionStatus.innerHTML          = 'Connecting...';
 
+    const addDotDotDot = setInterval(() => elements.connectionStatus.innerHTML += '.', 1000);
+
     p2p.connectToBroker()
+        .then(() => clearInterval(addDotDotDot))
         .then(_onSuccess)
         .catch(e => {
             elements.connectionStatus.innerHTML          = `Connection failed! Please retry.`;
