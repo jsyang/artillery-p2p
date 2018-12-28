@@ -169,6 +169,7 @@ function connectToBroker() {
         secure: /https/g.test(BROKER_PROTOCOL),
         config: {
             iceServers: [
+                {urls: 'numb.viagenie.ca',credential:'iWH0qr8Pdsi14&qQenc%IMeM$YjtVt',username: 'jsyang.ca@gmail.com'},
                 {urls: 'stun:stun.l.google.com:19302'},
                 {urls: 'stun:stun1.l.google.com:19302'},
                 {urls: 'stun:stun2.l.google.com:19302'},
