@@ -44,8 +44,11 @@ or run your own and point to it with `http://localhost:3000?brokerURL=http://BRO
 
 - game state gets out of sync easily during play when latency / packet loss gets bad
   - ghost tanks may remain when you die
+  - dead entities need to be removed
 - need timestamping for outgoing and incoming messages for ordering
 - [stun / turn server may be required](https://stackoverflow.com/questions/20068944)
+- break p2p client / server out into a lib by itself
+    - general clean up
 
 ## Learnings
 
@@ -68,6 +71,9 @@ than serialization for saved games
 
 - only certain fields / types / categories of entities should be synchronized. independent game logic
 on either peer can take care of non-essential states and converge to the same result
+
+- entity creation Id needs to be maxed when syncing from network so we don't create any entities locally, 
+which might have the same ID as one created by network game state update
 
 ### UX
 

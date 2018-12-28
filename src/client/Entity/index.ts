@@ -53,8 +53,13 @@ function create(type, params) {
     // even if they're passed in
     params = {...params};
 
-    // Record creation time for serialization / deserialization
-    if (!params._creationId) {
+    // Record id for serialization / deserialization
+
+    // Ensure we don't create 2 different entities with the same ID,
+    // especially if coming from a network game state update
+    if (params._creationId) {
+        _creationId = Math.max(_creationId, params._creationId);
+    } else {
         params._creationId = _creationId++;
     }
 
