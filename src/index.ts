@@ -1,7 +1,8 @@
 import Graphics from './Graphics';
 import GameScreen from './GameScreen';
 import Assets from './assets';
-import p2p, {StorageKeysP2P} from './Network/p2p';
+import p2p from 'p2p.system';
+import {StorageKeysP2P} from 'p2p.system/enums';
 import ConnectToBrokerModal from './UI/ConnectToBrokerModal';
 import LobbyModal from './UI/LobbyModal';
 
@@ -17,9 +18,13 @@ function startGame() {
     });
 }
 
-function showLobby() {
+function resetGraphicsAndLobby() {
     Graphics.destroy();
     ConnectToBrokerModal.destroy();
+}
+
+function showLobby() {
+    resetGraphicsAndLobby();
     LobbyModal.create(startGame);
 }
 
@@ -30,8 +35,7 @@ function reconnectToBroker() {
 }
 
 function setupP2P() {
-    Graphics.destroy();
-    LobbyModal.destroy();
+    resetGraphicsAndLobby();
     ConnectToBrokerModal.create({
         userId:    localStorage.getItem(StorageKeysP2P.UserId),
         whitelist: localStorage.getItem(StorageKeysP2P.Whitelist),
@@ -43,6 +47,7 @@ function onDOMContentLoaded() {
     removeEventListener('DOMContentLoaded', onDOMContentLoaded);
 
     p2p.setOnDisconnectFromBroker(reconnectToBroker);
+    p2p.setOnConnectedToPeer(resetGraphicsAndLobby);
 
     Assets
         .load()

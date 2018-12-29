@@ -8,7 +8,7 @@ import Entity from '../Entity';
 import HUD from './HUD';
 import {TEAM} from '../constants';
 import {GROUND_MAX_X, GROUND_MIN_X} from '../Entity/Ground';
-import p2p from '../Network/p2p';
+import p2p from 'p2p.system';
 import {deserializeFromNetwork, GameInfo, serializeForNetwork} from '../GameState';
 import Score from '../Score';
 

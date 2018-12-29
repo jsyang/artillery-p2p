@@ -1,5 +1,5 @@
 import applyStyle from './applyStyle';
-import p2p from '../Network/p2p';
+import p2p from 'p2p.system';
 
 let modal: HTMLDivElement | null;
 

@@ -14,7 +14,6 @@
   "scripts": {
     "ts-watch": "tsc --noEmit -w -p .",
     "regen-env": "node scripts/generateDotEnv.js",
-    "p2p-broker": "node src/server/p2p-broker.js",
     "watch": "yarn regen-sounds; yarn regen-env ; parcel _dev.html --port 3000 --no-hmr --no-source-maps",
     "regen-js": "rm -rf .cache ; yarn regen-sounds; yarn regen-env ; parcel build _dev.html --out-dir . ; yarn cleanup",
     "cleanup": "git checkout _dev.html ; mv client.*.js artillery.js ; rm *.map *.ogg",
@@ -35,6 +34,7 @@
   },
   "dependencies": {
     "express": "^4.16.4",
+    "p2p.system": "^1.0.0",
     "peer": "^0.2.10"
   }
 }
