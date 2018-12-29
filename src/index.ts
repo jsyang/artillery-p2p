@@ -46,6 +46,7 @@ function setupP2P() {
 function onDOMContentLoaded() {
     removeEventListener('DOMContentLoaded', onDOMContentLoaded);
 
+    p2p.setBrokerURL('https://peer-broker.herokuapp.com');
     p2p.setOnDisconnectFromBroker(reconnectToBroker);
     p2p.setOnConnectedToPeer(resetGraphicsAndLobby);
 

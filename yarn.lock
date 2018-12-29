@@ -3604,9 +3604,9 @@ osenv@^0.1.4:
     os-tmpdir "^1.0.0"
 
 p2p.system@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/p2p.system/-/p2p.system-1.0.1.tgz#00c41864b07266038e741c0977254af604eac408"
-  integrity sha512-n0Z0+co5pqXRHq076XYdzF62Q3dlMjOL/i3YLzh8BTzxXbZaj/uYLRLaJqliEfltOEdOttSl07XicCJjIP8LrQ==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/p2p.system/-/p2p.system-1.0.2.tgz#05e6e5aa77ea9708f701b9a97c3a2246c57bc27d"
+  integrity sha512-T7sTEfiMz4re4rrKdsnYTbK/CUORD4JXM9a1ddNbfbbVQ2Fr5yK0RfwTmQZ6GQ7S7N1S+Eks96x7DXhe7a/j4A==
   dependencies:
     express "^4.16.4"
     peer "^0.2.10"

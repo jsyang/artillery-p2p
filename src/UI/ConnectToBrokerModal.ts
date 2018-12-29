@@ -1,5 +1,6 @@
 import applyStyle from './applyStyle';
-import p2p, {StorageKeysP2P} from '../Network/p2p';
+import p2p from 'p2p.system';
+import {StorageKeysP2P} from 'p2p.system/enums';
 
 let modal: any;
 

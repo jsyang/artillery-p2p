@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import Graphics from '../../Graphics';
-import p2p from '../../Network/p2p';
+import p2p from 'p2p.system';
 import Score from '../../Score';
 
 const MARGIN_EDGE = 12;
