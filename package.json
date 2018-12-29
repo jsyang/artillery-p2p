@@ -16,7 +16,7 @@
     "regen-env": "node scripts/generateDotEnv.js",
     "watch": "yarn regen-sounds; yarn regen-env ; parcel _dev.html --port 3000 --no-hmr --no-source-maps",
     "regen-js": "rm -rf .cache ; yarn regen-sounds; yarn regen-env ; parcel build _dev.html --out-dir . ; yarn cleanup",
-    "cleanup": "git checkout _dev.html ; mv client.*.js artillery.js ; rm *.map *.ogg",
+    "cleanup": "git checkout _dev.html ; mv src.*.js artillery.js ; rm *.map *.ogg",
     "regen-sounds": "node scripts/generateSoundsList.js",
     "build": "yarn regen-js"
   },
@@ -25,16 +25,12 @@
     "@types/sat": "^0.0.30",
     "fast-memoize": "^2.5.1",
     "fscreen": "^1.0.2",
+    "p2p.system": "^1.0.0",
     "parcel-bundler": "^1.10.3",
     "peer": "^0.2.10",
     "peerjs": "^0.3.18",
     "pixi.js": "^4.8.2",
     "sat": "^0.6.0",
     "typescript": "^3.2.1"
-  },
-  "dependencies": {
-    "express": "^4.16.4",
-    "p2p.system": "^1.0.0",
-    "peer": "^0.2.10"
   }
 }
