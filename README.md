@@ -47,8 +47,6 @@ or run your own and point to it with `http://localhost:3000?brokerURL=http://BRO
   - dead entities need to be removed
 - need timestamping for outgoing and incoming messages for ordering
 - [stun / turn server may be required](https://stackoverflow.com/questions/20068944)
-- break p2p client / server out into a lib by itself
-    - general clean up
 
 ## Learnings
 
